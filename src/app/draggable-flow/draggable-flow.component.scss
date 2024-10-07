@@ -1,0 +1,118 @@
+@use "../../assets/css/common.scss" as flow-common;
+
+f-flow{
+    height: 100vh;
+}
+::ng-deep limiting-connections {
+    @include flow-common.connection;
+  }
+  .f-node {
+    @include flow-common.node;
+    width: 180px;
+    &.f-selected {
+      border: solid 1px var(--selected-connection-color);
+    }
+  }
+  .f-node-input, .f-node-output {
+    cursor: pointer;
+    z-index: 999;
+
+    &:not(.f-node) {
+      @include flow-common.connectors;
+    }
+    &.f-node-input-connected, &.f-node-output-connected {
+      background-color: var(--node-connector);
+      z-index: 999;
+
+    }
+    &.f-node-output-self-connectable{
+      svg{
+        display: none;
+      }
+    }
+    &.f-node-input-not-connectable {
+      background-color: var(--disabled-color);
+    }
+    &.f-node-output-not-connectable{
+      cursor: pointer;
+      background-color: red;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg{
+        display: block ;
+        width: 10px;
+        height: 10px;
+        color: white;
+        fill: white;
+      }
+    }
+  }
+
+  .toolbar {
+    @include flow-common.toolbar;
+  }
+
+  ::ng-deep .f-connection  {
+
+    .f-connection-drag-handle{
+      fill: transparent !important;
+    }
+    .f-connection-group{
+      fill: transparent;
+      &:hover{
+        background-color: var(--minimap-view-color);
+      }
+    }
+    &.f-snap-connection{
+      .f-connection-path {
+        stroke: var(--snap-connection-color);
+      }
+    }
+  }
+  
+  ::ng-deep .f-selected{
+    stroke-width: 2px;
+    .f-connection-path{
+      stroke: var(--selected-connection-color);
+    }
+  }
+
+
+  .tache_liste{
+    position: absolute;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100vh;
+    background-color: grey;
+    width: fit-content;
+    padding-right: 10px;
+    z-index: 999999;
+  }
+  .tache{
+    height: 50px;
+    border-bottom: solid 1px black;
+    cursor: pointer;
+  }
+
+  ::ng-deep .f-minimap {
+    background-color: var(--minimap-background-color);
+    border: solid 1px var(--minimap-border-color);
+    bottom: 16px;
+    right: 16px;
+    width: 120px;
+    height: 120px;
+    .f-minimap-node {
+      fill: var(--minimap-node-color);
+      &.f-selected {
+        fill: var(--minimap-node-selected-color);
+      }
+    }
+    .f-minimap-view {
+      fill: var(--minimap-view-color)
+    }
+  }
+
+    

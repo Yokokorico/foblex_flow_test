@@ -1,0 +1,52 @@
+<div class="tache_liste">
+  @for(tache of taches; track $index) {
+    <div class="tache" (click)="addNode(tache)">
+      <span>{{tache.mot_seq}} - {{tache.mot_lib}}</span>
+    </div>
+  }
+</div>
+<f-flow fDraggable (fLoaded)="onLoaded()" (fCreateConnection)="addConnection($event)" #flow>
+  <f-background>
+    <f-rect-pattern></f-rect-pattern>
+  </f-background>
+  <f-canvas fZoom>
+  <f-snap-connection></f-snap-connection>
+    <f-connection-for-create fBehavior="floating"></f-connection-for-create>
+    @for (connection of connections; track connection.inputId) {
+      <f-connection [fReassignDisabled]="true"
+                    [fOutputId]="connection.outputId" [fInputId]="connection.inputId"
+                    [fConnectionId]="connection.outputId.toString()"
+                    [fConnectionId]="connection.id"
+                    fBehavior="floating"
+                    fType="bezier"
+                    >
+                    <svg viewBox="0 0 10 10" fMarker [type]="eMarkerType.START" [height]="13" [width]="13" [refX]="5" [refY]="6">
+                      <circle cx="5" cy="5" r="2" stroke="none" fill="var(--connection-gradient-1)"></circle>
+                    </svg>
+                    <svg viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="15" [width]="15" [refX]="13" [refY]="8">
+                      <path fill="black" d="M0,0L700,350L0,700L150,350z"/>
+                    </svg>
+                    <svg id="selected_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.SELECTED_END" [height]="10" [width]="8" [refX]="8" [refY]="5">
+                        <path fill="var(--selected-connection-color)" d="M0,0L700,350L0,700L150,350z"/>
+                    </svg>
+      </f-connection>
+    }
+    @for(node of nodes; track node.guid) {
+      <div fNode fDragHandle [fNodePosition]="{ x: node.x, y: node.y }" [fNodeId]="node.guid" (fNodePositionChange)="setNodePosition($event, node.guid)">
+        <div fNodeOutput [fOutputMultiple]="true" fOutputId="{{node.guid}}" class="right" (click)="deleteOneConnection(node.id)"><svg fill="black" class="f-node-output-not-connectable" height="10px" width="10px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve">
+          <polygon points="456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490   489.292,457.678 277.331,245.004 489.292,32.337 "/>
+          </svg>
+        </div>
+        <div fNodeInput fInputId="{{node.guid}}" class="left" (click)="deleteOneConnection(node.id)">
+        </div>
+        {{node.title}}
+      </div>
+    }
+  </f-canvas>
+  <f-minimap [fMinSize]="3000"></f-minimap>
+</f-flow>
+<div class="toolbar">
+  <button class="f-button" (click)="onDeleteConnections()">Delete Connections</button>
+  <button class="f-button" (click)="getState()">Get State</button>
+</div>
+  
